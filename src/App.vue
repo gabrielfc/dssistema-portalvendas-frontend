@@ -1,7 +1,6 @@
 <template>
   <div id="app" :class="controlClassApp()">
     <Header :hideUserDropdown="!user" />
-    <Menu v-if="user" />
     <Loading v-if="validatingToken" />
     <Content v-else />
     <Footer />
@@ -13,14 +12,13 @@ import axios from "axios";
 import { baseApiUrl, userKey } from "@/global";
 import { mapState } from "vuex";
 import Header from "@/components/template/Header";
-import Menu from "@/components/template/Menu";
 import Content from "@/components/template/Content";
 import Footer from "@/components/template/Footer";
 import Loading from "@/components/template/Loading";
 
 export default {
   name: "App",
-  components: { Header, Menu, Content, Footer, Loading },
+  components: { Header, Content, Footer, Loading },
   computed: mapState(["isMenuVisible", "user"]),
   data: function() {
     return {
@@ -89,8 +87,28 @@ export default {
     Segoe UI Symbol, Noto Color Emoji;
 }
 
+.form-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 70px;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 2%;
+  background-color: #ffffff;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+}
+
 body {
   margin: 0;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+}
+
+a {
+  text-decoration: none;
 }
 
 #app {
@@ -101,36 +119,11 @@ body {
   color: #858796;
 
   display: grid;
-  grid-template-columns: 224px 1fr;
-  grid-template-rows: 70px 1fr 70px;
+  grid-template-columns: 1fr;
+  grid-template-rows: 58px 1fr 0.3fr;
   grid-template-areas:
-    "menu header"
-    "menu content"
-    "menu footer";
-}
-
-#app.hide-menu {
-  min-height: 100vh;
-  display: grid;
-  background-color: #f8f9fc;
-  font-size: 10px;
-  grid-template-columns: 104px 1fr;
-  grid-template-rows: 70px 1fr 70px;
-  grid-template-areas:
-    "menu header"
-    "menu content"
-    "menu footer";
-}
-
-#app.hide-all {
-  min-height: 100vh;
-  display: grid;
-  background-color: #f8f9fc;
-
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 70px 1fr;
-  grid-template-areas:
-    "content content"
-    "content content";
+    "header"
+    "content"
+    "footer";
 }
 </style>

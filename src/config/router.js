@@ -2,9 +2,11 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import Home from '@/components/home/Home'
-import Setup from '@/components/setup/Setup'
-import User from '@/components/user/User'
-import ChangePassword from '@/components/changePassword/ChangePassword'
+import FaleConosco from '@/components/faleconosco/FaleConosco'
+import Carrinho from '@/components/carrinho/Carrinho'
+import Checkout from '@/components/checkout/Checkout'
+import Finalizacao from '@/components/finalizacao/Finalizacao'
+import Planos from '@/components/planos/Planos'
 import Auth from '@/components/auth/Auth'
 
 Vue.use(VueRouter)
@@ -12,19 +14,36 @@ Vue.use(VueRouter)
 const routes = [{
     name: 'home',
     path: '/',
-    component: Home
-}, {
-    name: 'user',
-    path: '/user',
-    component: User
-}, {
-    name: 'changePassword',
-    path: '/changePassword',
-    component: ChangePassword
+    component: Home,
+    meta: { noAuth: true }
 }, {
     name: 'auth',
     path: '/auth',
     component: Auth
+}, {
+    name: 'faleconosco',
+    path: '/faleconosco',
+    component: FaleConosco,
+    meta: { noAuth: true }
+}, {
+    name: 'planos',
+    path: '/planos/:idCidade/:tipoPlano',
+    component: Planos,
+    meta: { noAuth: true }
+}, {
+    name: 'carrinho',
+    path: '/carrinho/:idPlano?',
+    component: Carrinho,
+    props: { showActions: true },
+    meta: { noAuth: true }
+}, {
+    name: 'checkout',
+    path: '/checkout',
+    component: Checkout
+}, {
+    name: 'finalizacao',
+    path: '/finalizacao',
+    component: Finalizacao
 }]
 
 const router = new VueRouter({

@@ -13,7 +13,7 @@ export default {
 <style>
 .content {
   grid-area: content;
-  font-size: 16px;
-  font-weight: bold;
+  display: flex;
+  justify-content: center;
 }
 </style>

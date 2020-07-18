@@ -10,3 +10,6 @@ Vue.use(VueMq, {
         xl: Infinity
     }
 })
+
+
+Vue.prototype.$scrollToTop = () => window.scrollTo(0, 0);
