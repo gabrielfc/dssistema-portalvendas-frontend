@@ -8,11 +8,11 @@
       <div class="carrinho">
         <div class="carrinho-box">
           <strong>Plano</strong>
-          <span>Plano ouro expecial</span>
+          <span>{{plano.nomePlano}}</span>
         </div>
         <div class="carrinho-box">
           <strong>Valor por pessoa</strong>
-          <span>R$ 120,00</span>
+          <span>R$ {{formatPrice(plano.valorTitular)}}</span>
         </div>
         <div class="carrinho-box">
           <strong>Qtd. Pessoa</strong>
@@ -20,7 +20,7 @@
             type="number"
             id="number"
             class="form-control quantity-input"
-            value="3"
+            v-model="plano.qtdPessoa"
             :disabled="!this.$props.showActions"
           />
         </div>
@@ -35,7 +35,7 @@
           </select>
         </div>
         <div class="carrinho-box" style="margin-top: 23px">
-          <b-button>X</b-button>
+          <b-button v-if="this.$props.showActions">X</b-button>
         </div>
 
         <div>
@@ -43,7 +43,7 @@
             <h3 style="padding: 16px;margin-right: 5px;">Total</h3>
             <h4></h4>
             <h4>
-              <span class="price">R$ 360,00</span>
+              <span class="price">R$ {{formatPrice(plano.valorTitular*plano.qtdPessoa)}}</span>
             </h4>
           </div>
 
@@ -61,19 +61,41 @@
 <script>
 import { baseApiUrl, showError } from "@/global";
 import axios from "axios";
+import { mapState } from "vuex";
 
 export default {
   name: "Carrinho",
+  computed: mapState(["plano"]),
   props: { showActions: Boolean },
   data: function() {
-    return {};
+    return { plano: { qtdPessoa: 1 } };
   },
   methods: {
     finalizarCompra() {
+      this.$store.commit("setPlano", this.plano);
       this.$router.push({ path: `/checkout` });
+    },
+    formatPrice(value) {
+      let val = (value / 1).toFixed(2).replace(".", ",");
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    },
+    async loadDetail() {
+      if (this.$route.params.idPlano) {
+        const url = `${baseApiUrl}/planos/${this.$route.params.idPlano}`;
+        const res = await axios.get(url);
+        if (res.data) {
+          this.plano = res.data;
+          this.plano.qtdPessoa = 1;
+        }
+      } else {
+        if (this.$store.state.plano) {
+          this.plano = this.$store.state.plano;
+        }
+      }
     }
   },
   mounted() {
+    this.loadDetail();
     this.$scrollToTop();
   }
 };

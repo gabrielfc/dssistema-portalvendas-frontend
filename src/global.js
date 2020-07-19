@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
-export const userKey = 'ecommerce_admin_user'
-export const baseApiUrl = 'https://modelobh-ecommerce-service.herokuapp.com/api/v1'
+export const userKey = 'ZHNzaXN0ZW1hczpkc3Npc3RlbWFzQDIwMjBAUE9SVEFMVkVOREFT'
+export const baseApiUrl = 'http://localhost:5000/api/v1'
 
 export function showError(e) {
     if (e && e.response && e.response.data && e.response.data.parameterViolations) {

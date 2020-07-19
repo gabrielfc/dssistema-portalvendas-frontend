@@ -1,5 +1,5 @@
 <template>
-  <div class="form-container">
+  <div class="form-container" style="width: 60%">
     <form method="post">
       <h2 class="text-center">
         <strong>Fale conosco</strong>

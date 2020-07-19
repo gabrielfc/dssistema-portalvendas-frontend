@@ -1,11 +1,13 @@
 <template>
-  <div class="checkout">
-    <DadosCliente />
+  <b-form @submit="onSubmit">
+    <div class="checkout">
+      <DadosCliente />
 
-    <Carrinho :showActions="false" />
+      <Carrinho :showActions="false" />
 
-    <Pagamento />
-  </div>
+      <Pagamento />
+    </div>
+  </b-form>
 </template>
 
 <script>
@@ -21,7 +23,18 @@ export default {
   data: function() {
     return {};
   },
-  methods: {},
+  methods: {
+    onSubmit(evt) {
+      evt.preventDefault();
+      const method = "post";
+      axios[method](`${baseApiUrl}/pedidos`, this.quiz)
+        .then(res => {
+          this.$toasted.global.defaultSuccess();
+          this.$router.push({ path: "/finalizacao" });
+        })
+        .catch(showError);
+    }
+  },
   mounted() {}
 };
 </script>

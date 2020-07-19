@@ -7,113 +7,24 @@
       </div>
     </div>
     <div class="row pricing-tables">
-      <div class="col-12 col-md-4 col-lg-4 pricing-tables">
+      <div class="col-12 col-md-12 col-lg-4 mt-4 pricing-tables" v-for="(item, index) in planos">
         <div class="pricing-table text-center">
           <div class="pricing-details">
             <h3>
-              BRONZE
+              {{item.nomePlano}}
               <br />
             </h3>
             <h1 style="color: rgb(0,92,80);">
-              <span></span>&nbsp;15,00
+              <span></span>
+              &nbsp;{{formatPrice(item.valorTitular)}}
             </h1>
             <h1 style="color: rgb(0,92,80);font-size: 15px;">
               <span></span>&nbsp;por mês
             </h1>
-            <ul>
-              <li>
-                Urgência e Emergência 24h
-                <br />
-              </li>
-              <li>Restaurações metálicas</li>
-              <li>
-                Limpeza a cada 6 meses
-                <br />
-              </li>
-              <li>
-                Valor por pessoa
-                <br />
-              </li>
-              <li>
-                <br />
-              </li>
-            </ul>
+            <div v-html="item.descricaoPlano" />
           </div>
           <div class="text-center plan-button">
-            <b-button class="button-planos" @click="comprarItem(3)">Adquirir</b-button>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-md-4 col-lg-4 pricing-tables">
-        <div class="pricing-table text-center">
-          <div class="pricing-details">
-            <h3>PRATA</h3>
-            <h1 style="color: rgb(0,92,80);">
-              <span></span>&nbsp;19.99
-            </h1>
-            <h1 style="color: rgb(0,92,80);font-size: 15px;">
-              <span></span>&nbsp;por mês
-            </h1>
-            <ul>
-              <li>
-                Urgência e Emergência 24h
-                <br />
-              </li>
-              <li>
-                Restaurações resina
-                <br />
-              </li>
-              <li>
-                Limpeza a cada 4 meses
-                <br />
-              </li>
-              <li>Aparelho Ortodôntico Metálico</li>
-            </ul>
-          </div>
-          <div class="plan-button">
-            <b-button class="button-planos" @click="comprarItem(3)">Adquirir</b-button>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-md-4 col-lg-4 pricing-tables">
-        <div class="pricing-table text-center">
-          <div class="pricing-details">
-            <h3>OURO</h3>
-            <h1 style="color: rgb(0,92,80);">
-              <span></span>&nbsp;29.99
-            </h1>
-            <h1 style="color: rgb(0,92,80);font-size: 15px;">
-              <span></span>&nbsp;por mês
-            </h1>
-            <ul>
-              <li>
-                Urgência e Emergência 24h
-                <br />
-              </li>
-              <li>
-                Restaurações resina
-                <br />
-              </li>
-              <li>
-                Limpeza a cada 4 meses
-                <br />
-              </li>
-              <li>
-                Aparelho Ortodôntico Metálico
-                <br />
-              </li>
-              <li>
-                Implantes de titânio
-                <br />
-              </li>
-              <li>
-                Cirurgias de alta complexidade
-                <br />
-              </li>
-            </ul>
-          </div>
-          <div class="plan-button">
-            <b-button class="button-planos" @click="comprarItem(3)">Adquirir</b-button>
+            <b-button class="button-planos" @click="comprarItem(item.id)">Adquirir</b-button>
           </div>
         </div>
       </div>
@@ -128,14 +39,29 @@ import axios from "axios";
 export default {
   name: "Planos",
   data: function() {
-    return {};
+    return { planos: [] };
   },
   methods: {
     comprarItem(id) {
       this.$router.push({ path: `/carrinho/${id}` });
+    },
+    formatPrice(value) {
+      let val = (value / 1).toFixed(2).replace(".", ",");
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    },
+    async loadDetail() {
+      if (this.$route.params.idCidade && this.$route.params.tipoPlano) {
+        const url = `${baseApiUrl}/planos/${this.$route.params.idCidade}/${this.$route.params.tipoPlano}`;
+        const res = await axios.get(url);
+        if (res.data) {
+          this.planos = res.data;
+        }
+      }
     }
   },
-  mounted() {}
+  mounted() {
+    this.loadDetail();
+  }
 };
 </script>
 
@@ -174,6 +100,7 @@ export default {
 .pricing-table ul {
   padding-bottom: 28px;
   list-style: None;
+  padding-left: 0;
   color: #5e629c;
   display: block;
   line-height: 33px;

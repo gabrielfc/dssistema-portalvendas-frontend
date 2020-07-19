@@ -1,8 +1,7 @@
 <template>
-  <div id="app" :class="controlClassApp()">
-    <Header :hideUserDropdown="!user" />
-    <Loading v-if="validatingToken" />
-    <Content v-else />
+  <div id="app">
+    <Header />
+    <Content />
     <Footer />
   </div>
 </template>
@@ -14,68 +13,17 @@ import { mapState } from "vuex";
 import Header from "@/components/template/Header";
 import Content from "@/components/template/Content";
 import Footer from "@/components/template/Footer";
-import Loading from "@/components/template/Loading";
 
 export default {
   name: "App",
-  components: { Header, Content, Footer, Loading },
-  computed: mapState(["isMenuVisible", "user"]),
+  components: { Header, Content, Footer },
+  computed: mapState(["basicAuth"]),
   data: function() {
-    return {
-      validatingToken: true
-    };
+    return {};
   },
-  methods: {
-    async validateToken() {
-      this.validatingToken = true;
-
-      if (this.$route.meta.noAuth) {
-        this.validatingToken = false;
-        return;
-      }
-
-      const json = localStorage.getItem(userKey);
-      const userData = JSON.parse(json);
-      this.$store.commit("setUser", null);
-
-      if (!userData) {
-        //if user data not exists into localstore
-        this.validatingToken = false;
-        this.$router.push({ name: "auth" }); //Redirect to auth
-        return;
-      }
-
-      const res = await axios.post(
-        `${baseApiUrl}/users/validateToken`,
-        userData
-      );
-
-      if (res.data) {
-        //If exists a valid token
-        this.$store.commit("setUser", userData);
-
-        if (this.$mq === "xs" || this.$mq === "sm") {
-          this.$store.commit("toggleMenu", false);
-        }
-      } else {
-        localStorage.removeItem(userKey);
-        this.$router.push({ name: "auth" });
-      }
-
-      this.validatingToken = false;
-    },
-    controlClassApp: function() {
-      if (!this.$store.state.user) {
-        return "hide-all";
-      }
-      if (!this.$store.state.isMenuVisible) {
-        return "hide-menu";
-      }
-      return "";
-    }
-  },
+  methods: {},
   created() {
-    this.validateToken();
+    this.$store.commit("setBasicAuth", userKey);
   }
 };
 </script>

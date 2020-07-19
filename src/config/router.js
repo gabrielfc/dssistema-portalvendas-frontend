@@ -7,7 +7,6 @@ import Carrinho from '@/components/carrinho/Carrinho'
 import Checkout from '@/components/checkout/Checkout'
 import Finalizacao from '@/components/finalizacao/Finalizacao'
 import Planos from '@/components/planos/Planos'
-import Auth from '@/components/auth/Auth'
 
 Vue.use(VueRouter)
 
@@ -16,10 +15,6 @@ const routes = [{
     path: '/',
     component: Home,
     meta: { noAuth: true }
-}, {
-    name: 'auth',
-    path: '/auth',
-    component: Auth
 }, {
     name: 'faleconosco',
     path: '/faleconosco',

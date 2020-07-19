@@ -5,20 +5,12 @@
         <strong>Selecione seu perfil</strong>
       </h2>
       <div class="form-group form-inline mt-3 painelCidade">
-        <select class="form-control">
-          <optgroup label="Selecione seu estado...">
-            <option value="12" selected>Selecione seu estado...</option>
-            <option value="13">Minas</option>
-            <option value="14">Montes claros</option>
-          </optgroup>
-        </select>
-        <select class="form-control ml-2">
-          <optgroup label="Selecione sua cidade...">
-            <option value="12" selected>Selecione sua cidade...</option>
-            <option value="13">Belo Horizonte</option>
-            <option value="14">Montes claros</option>
-          </optgroup>
-        </select>
+        <b-form-select id="txt-uf" v-model="uf" :options="ufs" @change="getCityList()" required></b-form-select>
+        <b-form-select txt="txt-cities" v-model="idCidade" :options="cities" required>
+          <template v-slot:first>
+            <b-form-select-option :value="null" disabled>-- Selecione um município --</b-form-select-option>
+          </template>
+        </b-form-select>
       </div>
       <div class="form-row">
         <div class="col">
@@ -52,14 +44,38 @@ import axios from "axios";
 export default {
   name: "Home",
   data: function() {
-    return { uf: "", idCidade: "2" };
+    return {
+      ufs: [],
+      cities: [],
+      uf: 25,
+      idCidade: 8770
+    };
   },
   methods: {
     carregarPlanos(id) {
       this.$router.push({ path: `/planos/${this.idCidade}/${id}` });
+    },
+    async getUFList() {
+      const url = `${baseApiUrl}/enderecos/ufs`;
+      const res = await axios.get(url);
+      if (res.data) {
+        this.ufs = res.data;
+      }
+    },
+    async getCityList() {
+      if (this.uf) {
+        const url = `${baseApiUrl}/enderecos/ufs/${this.uf}/cidades`;
+        const res = await axios.get(url);
+        if (res.data) {
+          this.cities = res.data;
+        }
+      }
     }
   },
-  mounted() {}
+  mounted() {
+    this.getUFList();
+    this.getCityList();
+  }
 };
 </script>
 

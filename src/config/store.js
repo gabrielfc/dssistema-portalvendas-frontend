@@ -6,27 +6,22 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        isMenuVisible: false,
-        user: null
+        basicAuth: null,
+        plano: {}
     },
     mutations: {
-        toggleMenu(state, isVisible) {
+        setBasicAuth(state, basicAuth) {
+            state.basicAuth = basicAuth
+            if (basicAuth) {
+                axios.defaults.headers.common['Authorization'] = `Basic ${basicAuth}`
 
-            if (isVisible === undefined) {
-                state.isMenuVisible = !state.isMenuVisible
-            } else {
-                state.isMenuVisible = isVisible
-            }
-        },
-        setUser(state, user) {
-            state.user = user
-            if (user) {
-                axios.defaults.headers.common['Authorization'] = `bearer ${user.token}`
-                state.isMenuVisible = true
             } else {
                 delete axios.defaults.headers.common['Authorization']
-                state.isMenuVisible = false
+
             }
+        },
+        setPlano(state, plano) {
+            state.plano = plano;
         }
     }
 })

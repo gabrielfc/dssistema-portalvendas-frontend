@@ -17,17 +17,24 @@
 
       <div v-if="formaPagamento == '1'">
         <div class="form-group">
-          <input class="form-control" type="text" placeholder="Cartão" style="margin-top: 25px;" />
+          <input
+            class="form-control"
+            type="text"
+            placeholder="Cartão"
+            style="margin-top: 25px;"
+            required
+          />
         </div>
         <div class="form-group">
-          <input class="form-control" type="text" placeholder="Nome do titular" />
+          <input class="form-control" type="text" placeholder="Nome do titular" required />
         </div>
         <div class="form-group form-inline">
-          <input class="form-control" type="text" placeholder="Vencimento" />
+          <input class="form-control" type="text" placeholder="Vencimento" required />
           <input
             class="form-control"
             type="text"
             placeholder="Código de segurança"
+            required
             style="margin-left: 15px;"
           />
         </div>
@@ -35,7 +42,8 @@
 
       <b-button
         class="button-planos"
-        @click="finalizarCompra()"
+        type="submit"
+        :disabled="formaPagamento == null"
         style="margin-top: 25px;"
       >Finalizar Compra</b-button>
     </form>
@@ -50,12 +58,10 @@ export default {
   name: "Pagamento",
   data: function() {
     return {
-      formaPagamento: ""
+      formaPagamento: null
     };
   },
-  methods: {
-    finalizarCompra() {}
-  },
+  methods: {},
   mounted() {}
 };
 </script>
