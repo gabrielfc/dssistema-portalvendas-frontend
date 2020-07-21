@@ -3,7 +3,7 @@
     <form method="post">
       <h2 class="text-center">
         <strong>Fale conosco</strong>
-      </h2>Blá blá blá
+      </h2>Entre em contato com a DS atraves do email: dssistemas@dssistemas.com.br
     </form>
   </div>
 </template>

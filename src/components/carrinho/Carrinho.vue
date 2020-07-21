@@ -5,7 +5,7 @@
         <strong>Carrinho</strong>
       </h2>
 
-      <div class="carrinho">
+      <div class="carrinho" v-if="plano.nomePlano">
         <div class="carrinho-box">
           <strong>Plano</strong>
           <span>{{plano.nomePlano}}</span>
@@ -26,16 +26,16 @@
         </div>
         <div class="carrinho-box">
           <strong>Cobrança</strong>
-          <select class="form-control" :disabled="!this.$props.showActions">
-            <optgroup label="Mensal">
-              <option value="12" selected>Mensal</option>
-              <option value="13">Semetral</option>
-              <option value="14">Anual</option>
-            </optgroup>
-          </select>
+
+          <b-form-select v-model="plano.periodicidade">
+            <b-form-select-option value="1">Mensal</b-form-select-option>
+            <b-form-select-option value="3">Trimestral</b-form-select-option>
+            <b-form-select-option value="6">Semestral</b-form-select-option>
+            <b-form-select-option value="12">Anual</b-form-select-option>
+          </b-form-select>
         </div>
         <div class="carrinho-box" style="margin-top: 23px">
-          <b-button v-if="this.$props.showActions">X</b-button>
+          <b-button v-if="this.$props.showActions" @click="limparCarrinho()">X</b-button>
         </div>
 
         <div>
@@ -43,7 +43,7 @@
             <h3 style="padding: 16px;margin-right: 5px;">Total</h3>
             <h4></h4>
             <h4>
-              <span class="price">R$ {{formatPrice(plano.valorTitular*plano.qtdPessoa)}}</span>
+              <span class="price">R$ {{formatPrice(getTotal())}}</span>
             </h4>
           </div>
 
@@ -54,6 +54,7 @@
           >Finalizar Compra</b-button>
         </div>
       </div>
+      <div class="carrinho" v-else>Escolha um plano</div>
     </form>
   </div>
 </template>
@@ -68,12 +69,23 @@ export default {
   computed: mapState(["plano"]),
   props: { showActions: Boolean },
   data: function() {
-    return { plano: { qtdPessoa: 1 } };
+    return { plano: { qtdPessoa: 1, periodicidade: 1 } };
   },
   methods: {
     finalizarCompra() {
       this.$store.commit("setPlano", this.plano);
       this.$router.push({ path: `/checkout` });
+    },
+    limparCarrinho() {
+      this.$store.commit("setPlano", null);
+      this.$router.push({ path: `/` });
+    },
+    getTotal() {
+      return (
+        this.plano.valorTitular *
+        parseInt(this.plano.qtdPessoa) *
+        parseInt(this.plano.periodicidade)
+      );
     },
     formatPrice(value) {
       let val = (value / 1).toFixed(2).replace(".", ",");
@@ -86,6 +98,7 @@ export default {
         if (res.data) {
           this.plano = res.data;
           this.plano.qtdPessoa = 1;
+          this.plano.periodicidade = 1;
         }
       } else {
         if (this.$store.state.plano) {
