@@ -9,11 +9,10 @@
         <a class="navbar-brand" href="#">
           <img id="brand-image" src="@/assets/logo.png" style="width: 133px;" />
         </a>
-        <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navcol-1">
+
+        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+
+        <b-collapse id="nav-collapse" is-nav>
           <ul class="nav navbar-nav mr-auto w-100 justify-content-end">
             <li class="nav-item" role="presentation">
               <router-link to="/" class="nav-link" @click.native="$scrollToTop">Home</router-link>
@@ -29,7 +28,7 @@
               >Fale Conosco</router-link>
             </li>
           </ul>
-        </div>
+        </b-collapse>
       </div>
     </nav>
   </header>

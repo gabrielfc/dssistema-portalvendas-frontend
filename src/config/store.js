@@ -7,21 +7,25 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         basicAuth: null,
-        plano: {}
+        plano: {},
+        finalizacao: {}
     },
     mutations: {
         setBasicAuth(state, basicAuth) {
             state.basicAuth = basicAuth
             if (basicAuth) {
-                axios.defaults.headers.common['Authorization'] = `Basic ${basicAuth}`
+                axios.defaults.headers.common['X-Auth-Token'] = basicAuth
 
             } else {
-                delete axios.defaults.headers.common['Authorization']
+                delete axios.defaults.headers.common['X-Auth-Token']
 
             }
         },
         setPlano(state, plano) {
             state.plano = plano;
+        },
+        setFinalizacao(state, finalizacao) {
+            state.finalizacao = finalizacao;
         }
     }
 })

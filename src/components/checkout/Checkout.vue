@@ -38,7 +38,7 @@
             placeholder="E-mail"
             v-model="cliente.email"
             required
-            maxlength="150"
+            maxlength="149"
             style="margin-top: 13px;"
           />
           <input
@@ -67,7 +67,7 @@
             class="form-control"
             type="text"
             size="8"
-            maxlength="150"
+            maxlength="20"
             placeholder="Número"
             v-model="cliente.numero"
             style="margin-top: 13px;"
@@ -241,13 +241,20 @@ export default {
       const method = "post";
       axios[method](`${baseApiUrl}/pedidos`, {
         cliente: this.cliente,
-        planoValor: this.$store.state.plano,
+        planoValor: {
+          id: this.$store.state.plano.id,
+          qtdPessoa: this.$store.state.plano.qtdPessoa,
+          periodicidade: this.$store.state.plano.periodicidade
+        },
         formaPagamento: this.formaPagamento,
-        dadosCartao: this.dadosCartao
+        dadosCartao: this.dadosCartao,
+        diaVencimento: 10,
+        situacao: "novo"
       })
         .then(res => {
           this.$toasted.global.defaultSuccess();
           this.$store.commit("setPlano", null);
+          this.$store.commit("setFinalizacao", res.data);
           this.$router.push({ path: "/finalizacao" });
         })
         .catch(showError);

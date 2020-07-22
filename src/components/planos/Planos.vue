@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="row pricing-tables">
-      <div class="col-12 col-md-12 col-lg-4 mt-4 pricing-tables" v-for="(item, index) in planos">
+      <div class="col-12 col-md-12 col-lg-4 mt-4 pricing-tables" v-for="item in planos">
         <div class="pricing-table text-center">
           <div class="pricing-details">
             <h3>

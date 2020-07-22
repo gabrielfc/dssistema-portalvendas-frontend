@@ -19,15 +19,18 @@
           <input
             type="number"
             id="number"
+            @change="getTotal()"
             class="form-control quantity-input"
             v-model="plano.qtdPessoa"
+            min="1"
+            max="1000"
             :disabled="!this.$props.showActions"
           />
         </div>
         <div class="carrinho-box">
           <strong>Cobrança</strong>
 
-          <b-form-select v-model="plano.periodicidade">
+          <b-form-select v-model="plano.periodicidade" @change="getTotal()">
             <b-form-select-option value="1">Mensal</b-form-select-option>
             <b-form-select-option value="3">Trimestral</b-form-select-option>
             <b-form-select-option value="6">Semestral</b-form-select-option>
@@ -43,7 +46,7 @@
             <h3 style="padding: 16px;margin-right: 5px;">Total</h3>
             <h4></h4>
             <h4>
-              <span class="price">R$ {{formatPrice(getTotal())}}</span>
+              <span class="price">R$ {{formatPrice(total)}}</span>
             </h4>
           </div>
 
@@ -69,7 +72,7 @@ export default {
   computed: mapState(["plano"]),
   props: { showActions: Boolean },
   data: function() {
-    return { plano: { qtdPessoa: 1, periodicidade: 1 } };
+    return { plano: { qtdPessoa: 1, periodicidade: 1 }, total: 0.0 };
   },
   methods: {
     finalizarCompra() {
@@ -81,11 +84,10 @@ export default {
       this.$router.push({ path: `/` });
     },
     getTotal() {
-      return (
+      this.total =
         this.plano.valorTitular *
         parseInt(this.plano.qtdPessoa) *
-        parseInt(this.plano.periodicidade)
-      );
+        parseInt(this.plano.periodicidade);
     },
     formatPrice(value) {
       let val = (value / 1).toFixed(2).replace(".", ",");
@@ -99,10 +101,15 @@ export default {
           this.plano = res.data;
           this.plano.qtdPessoa = 1;
           this.plano.periodicidade = 1;
+          this.getTotal();
         }
       } else {
         if (this.$store.state.plano) {
           this.plano = this.$store.state.plano;
+          if (this.plano.qtdPessoa < 1) {
+            this.plano.qtdPessoa = 1;
+          }
+          this.getTotal();
         }
       }
     }

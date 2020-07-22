@@ -58,6 +58,7 @@ export default {
     async getUFList() {
       const url = `${baseApiUrl}/enderecos/ufs`;
       const res = await axios.get(url);
+      console.log(res);
       if (res.data) {
         this.ufs = res.data;
       }

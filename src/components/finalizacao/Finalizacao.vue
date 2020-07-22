@@ -4,7 +4,13 @@
       <form method="post">
         <h2 class="text-center">
           <strong>Finalização</strong>
-        </h2>Blá blá blá
+        </h2>
+
+        <div>{{finalizacao.mensagem}}</div>
+
+        <div v-if="this.finalizacao.urlBoleto">
+          <b-link href="this.finalizacao.urlBoleto">Download do boleto</b-link>
+        </div>
       </form>
     </div>
   </div>
@@ -17,10 +23,12 @@ import axios from "axios";
 export default {
   name: "Finalizacao",
   data: function() {
-    return {};
+    return { finalizacao: {} };
   },
   methods: {},
-  mounted() {}
+  mounted() {
+    this.finalizacao = this.$store.state.finalizacao;
+  }
 };
 </script>
 

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
-export const userKey = 'ZHNzaXN0ZW1hczpkc3Npc3RlbWFzQDIwMjBAUE9SVEFMVkVOREFT'
-export const baseApiUrl = 'http://localhost:5000/api/v1'
+export const userKey = 'HIPLDdnfkdld1234@33&%###%322334'
+export const baseApiUrl = 'http://localhost:8080/ds-odonto-cloud/rest'
 
 export function showError(e) {
     if (e && e.response && e.response.data && e.response.data.parameterViolations) {
